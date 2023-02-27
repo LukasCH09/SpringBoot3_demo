@@ -4,13 +4,11 @@ package com.student.controller;
 import com.student.StudentProperties;
 import com.student.core.Student;
 import com.student.service.StudentService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
@@ -23,13 +21,23 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("/msg")
-    public String getMessage() {
-        return studentProperties.getGreeting();
+    public String getMessage(@RequestHeader("user-agent") String userAgent) {
+        return studentProperties.getGreeting() + userAgent;
     }
 
     @GetMapping
-    public Collection<Student> getAll(){
+    public Collection<Student> getAll() {
         return studentService.getAllStudents();
+    }
+
+    @GetMapping("/{id}")
+    public Student getStudent(@PathVariable("id")  long id){
+        return studentService.get(id);
+    }
+
+    @GetMapping("/single")
+    public Student getSingelStudent(@RequestParam("id") Optional<Long> id){
+        return studentService.get(id.orElse(1L));
     }
 
 
