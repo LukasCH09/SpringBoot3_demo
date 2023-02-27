@@ -40,5 +40,10 @@ public class StudentController {
         return studentService.get(id.orElse(1L));
     }
 
+    @GetMapping("/search/{department}")
+    public Collection<Student> getStudentsPerDepartment(@PathVariable("department") String department
+                                            , @RequestParam("name") String name){
+        return studentService.getAllStudentsInDepartment(department, name);
+    }
 
 }
